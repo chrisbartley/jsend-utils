@@ -1,0 +1,24 @@
+{
+  "name": "jsend-utils",
+  "version": "1.0.0",
+  "description": "Simple helper functions for producing JSend objects and responses.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "api-docs": "./node_modules/.bin/jsdoc index.js"
+  },
+  "keywords": [
+    "jsend"
+  ],
+  "author": "Chris Bartley <bartley@cmu.edu>",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "http-status": "^0.1.8"
+  },
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "jsdoc": "^3.3.0-alpha9",
+    "mocha": "^1.21.5",
+    "should": "^4.0.4"
+  }
+}
