@@ -45,6 +45,11 @@ describe("Error subclasses", function() {
          (err2 instanceof Error).should.be.true;
       });
 
+      it("Should be an instance of JSendError", function() {
+         (err1 instanceof JSendError).should.be.true;
+         (err2 instanceof JSendError).should.be.true;
+      });
+
       it("Should be an instance of JSendClientError", function() {
          (err1 instanceof JSendClientError).should.be.true;
          (err2 instanceof JSendClientError).should.be.true;
@@ -72,6 +77,14 @@ describe("Error subclasses", function() {
          (err1 instanceof Error).should.be.true;
       });
 
+      it("Should be an instance of JSendError", function() {
+         (err1 instanceof JSendError).should.be.true;
+      });
+
+      it("Should be an instance of JSendClientError", function() {
+         (err1 instanceof JSendClientError).should.be.true;
+      });
+
       it("Should be an instance of JSendClientValidationError", function() {
          (err1 instanceof JSendClientValidationError).should.be.true;
       });
@@ -97,6 +110,11 @@ describe("Error subclasses", function() {
       it("Should be an instance of Error", function() {
          (err1 instanceof Error).should.be.true;
          (err2 instanceof Error).should.be.true;
+      });
+
+      it("Should be an instance of JSendError", function() {
+         (err1 instanceof JSendError).should.be.true;
+         (err2 instanceof JSendError).should.be.true;
       });
 
       it("Should be an instance of JSendServerError", function() {
