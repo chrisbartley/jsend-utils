@@ -1,6 +1,6 @@
 {
   "name": "jsend-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple helper functions for producing JSend objects and responses.",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "http-status": "^0.1.8"
   },
   "devDependencies": {
-    "chai": "^1.9.2",
     "jsdoc": "^3.3.0-alpha9",
     "mocha": "^1.21.5",
     "should": "^4.0.4"
