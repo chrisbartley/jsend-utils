@@ -10,7 +10,7 @@ Installation
 
 Install this module in the usual way:
 
-        npm install jsend-utils
+    npm install jsend-utils
         
 Usage
 ================================
@@ -18,6 +18,12 @@ Usage
 To decorate Express's response with methods you can use to return JSend responses, do the following (you'll only need
 to do this once, typically in your main app.js):
 
-        require('./lib/jsend').decorateExpressResponse(require('express').response);
+    require('./lib/jsend').decorateExpressResponse(require('express').response);
         
-Sometimes it's useful for server-side code to return an error to another server-side caller, but provide more details about what went wrong, and do so in the JSend format, making it easier to return a JSend response to the client side.  The four Error subclasses provided by this module are intended for that use case. 
+Sometimes it's useful for server-side code to return an error to another server-side caller, but provide more details about what went wrong, and do so in the JSend format, making it easier to return a JSend response to the client side.  The four Error subclasses provided by this module are intended for that use case.
+ 
+For full documentation, generate the JSDocs:
+
+    npm run-script api-docs
+    
+You'll find the generated docs in the `out` directory.
