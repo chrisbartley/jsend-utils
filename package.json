@@ -13,12 +13,12 @@
   "author": "Chris Bartley <bartley@cmu.edu>",
   "license": "GPL-2.0",
   "dependencies": {
-    "http-status": "^0.1.8"
+    "http-status": "^0.2.0"
   },
   "devDependencies": {
-    "jsdoc": "^3.3.0-alpha9",
-    "mocha": "^1.21.5",
-    "should": "^4.0.4"
+    "jsdoc": "^3.3.2",
+    "mocha": "^2.2.5",
+    "should": "^7.0.2"
   },
   "directories": {
     "test": "test"
