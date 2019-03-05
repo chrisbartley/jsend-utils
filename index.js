@@ -1,4 +1,4 @@
-var httpStatusCodes = require('http-status');
+const httpStatusCodes = require('http-status');
 
 /**
  * Creates and returns JSend success object.
@@ -8,7 +8,7 @@ var httpStatusCodes = require('http-status');
  * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 200 (OK).  If specified, it
  * should be an HTTP status code in the range [200, 299].
  */
-var createJSendSuccess = function(data, httpStatus) {
+const createJSendSuccess = function(data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.OK;
    return {
       code : httpStatus,
@@ -28,7 +28,7 @@ var createJSendSuccess = function(data, httpStatus) {
  * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 400 (Bad Request). If
  * specified, it should be an HTTP status code in the range [400, 499].
  */
-var createJSendClientError = function(message, data, httpStatus) {
+const createJSendClientError = function(message, data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.BAD_REQUEST;
    return {
       code : httpStatus,
@@ -47,7 +47,7 @@ var createJSendClientError = function(message, data, httpStatus) {
  * @param {*} data details of why the request failed. If the reasons for failure correspond to POST values, the response
  * object's keys SHOULD correspond to those POST values. Can be <code>null</code>.
  */
-var createJSendClientValidationError = function(message, data) {
+const createJSendClientValidationError = function(message, data) {
    return createJSendClientError(message, data, httpStatusCodes.UNPROCESSABLE_ENTITY);
 };
 
@@ -62,7 +62,7 @@ var createJSendClientValidationError = function(message, data) {
  * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 500 (Internal Server Error).
  * If specified, it should be an HTTP status code in the range [500, 599].
  */
-var createJSendServerError = function(message, data, httpStatus) {
+const createJSendServerError = function(message, data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.INTERNAL_SERVER_ERROR;
    return {
       code : httpStatus,
@@ -226,7 +226,7 @@ var createJSendServerError = function(message, data, httpStatus) {
  * </ul>
  * @param {obj} response Express response
  */
-var decorateExpressResponse = function(response) {
+const decorateExpressResponse = function(response) {
    /**
     * Sets the HTTP status and sends a JSend success response, for when an API call is successful.
     *
@@ -235,8 +235,8 @@ var decorateExpressResponse = function(response) {
     * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 200 (OK).  If specified, it
     * should be an HTTP status code in the range [200, 299].
     */
-   response.jsendSuccess = function(data, httpStatus) {
-      var jsendObj = createJSendSuccess(data, httpStatus);
+   response['jsendSuccess'] = function(data, httpStatus) {
+      const jsendObj = createJSendSuccess(data, httpStatus);
       return this.status(jsendObj.code).json(jsendObj);
    };
 
@@ -251,8 +251,8 @@ var decorateExpressResponse = function(response) {
     * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 400 (Bad Request). If
     * specified, it should be an HTTP status code in the range [400, 499].
     */
-   response.jsendClientError = function(message, data, httpStatus) {
-      var jsendObj = createJSendClientError(message, data, httpStatus);
+   response['jsendClientError'] = function(message, data, httpStatus) {
+      const jsendObj = createJSendClientError(message, data, httpStatus);
       return this.status(jsendObj.code).json(jsendObj);
    };
 
@@ -265,8 +265,8 @@ var decorateExpressResponse = function(response) {
     * @param {*} data details of why the request failed. If the reasons for failure correspond to POST values, the response
     * object's keys SHOULD correspond to those POST values. Can be <code>null</code>.
     */
-   response.jsendClientValidationError = function(message, data) {
-      var jsendObj = createJSendClientValidationError(message, data);
+   response['jsendClientValidationError'] = function(message, data) {
+      const jsendObj = createJSendClientValidationError(message, data);
       return this.status(jsendObj.code).json(jsendObj);
    };
 
@@ -281,8 +281,8 @@ var decorateExpressResponse = function(response) {
     * @param {number} [httpStatus] the HTTP status code to use for the response, defaults to 500 (Internal Server Error).
     * If specified, it should be an HTTP status code in the range [500, 599].
     */
-   response.jsendServerError = function(message, data, httpStatus) {
-      var jsendObj = createJSendServerError(message, data, httpStatus);
+   response['jsendServerError'] = function(message, data, httpStatus) {
+      const jsendObj = createJSendServerError(message, data, httpStatus);
       return this.status(jsendObj.code).json(jsendObj);
    };
 
@@ -293,11 +293,11 @@ var decorateExpressResponse = function(response) {
     *
     * @param {string|object} jsendResponse The JSend response to pass through
     */
-   response.jsendPassThrough = function(jsendResponse) {
+   response['jsendPassThrough'] = function(jsendResponse) {
       if (typeof jsendResponse === 'string') {
          jsendResponse = JSON.parse(jsendResponse);
       }
-      return this.status(jsendResponse.code).json(jsendResponse);
+      return this.status(jsendResponse['code']).json(jsendResponse);
    };
 };
 
@@ -311,12 +311,18 @@ var decorateExpressResponse = function(response) {
  * <code>data</code> property.
  * @constructor
  */
-function JSendError(jsendObj) {
-   this.constructor.prototype.__proto__ = Error.prototype;
-   Error.captureStackTrace(this, this.constructor);
-   this.name = this.constructor.name;
-   this.data = jsendObj;
-   this.message = jsendObj.message || "Error";
+class JSendError extends Error {
+   constructor(jsendObj = {}) {
+      super();
+
+      if (Error.captureStackTrace) {
+         Error.captureStackTrace(this, JSendError);
+      }
+
+      this.name = this.constructor.name;
+      this.data = jsendObj;
+      this.message = (jsendObj && jsendObj.message) ? jsendObj.message : 'Error';
+   }
 }
 
 /**
@@ -331,12 +337,18 @@ function JSendError(jsendObj) {
  * specified, it should be an HTTP status code in the range [400, 499].
  * @constructor
  */
-function JSendClientError(message, data, httpStatus) {
-   this.constructor.prototype.__proto__ = JSendError.prototype;
-   Error.captureStackTrace(this, this.constructor);
-   this.name = this.constructor.name;
-   this.data = createJSendClientError(message, data, httpStatus);
-   this.message = this.data.message || "Client Error";
+class JSendClientError extends JSendError {
+   constructor(message, data, httpStatus) {
+      super();
+
+      if (Error.captureStackTrace) {
+         Error.captureStackTrace(this, JSendClientError);
+      }
+
+      this.name = this.constructor.name;
+      this.data = createJSendClientError(message, data, httpStatus);
+      this.message = this.data.message || "Client Error";
+   }
 }
 
 /**
@@ -350,12 +362,18 @@ function JSendClientError(message, data, httpStatus) {
  * object's keys SHOULD correspond to those POST values. Can be <code>null</code>.
  * @constructor
  */
-function JSendClientValidationError(message, data) {
-   this.constructor.prototype.__proto__ = JSendClientError.prototype;
-   Error.captureStackTrace(this, this.constructor);
-   this.name = this.constructor.name;
-   this.data = createJSendClientValidationError(message, data);
-   this.message = this.data.message || "Validation Error";
+class JSendClientValidationError extends JSendClientError {
+   constructor(message, data) {
+      super();
+
+      if (Error.captureStackTrace) {
+         Error.captureStackTrace(this, JSendClientValidationError);
+      }
+
+      this.name = this.constructor.name;
+      this.data = createJSendClientValidationError(message, data);
+      this.message = this.data.message || "Validation Error";
+   }
 }
 
 /**
@@ -370,12 +388,18 @@ function JSendClientValidationError(message, data) {
  * If specified, it should be an HTTP status code in the range [500, 599].
  * @constructor
  */
-function JSendServerError(message, data, httpStatus) {
-   this.constructor.prototype.__proto__ = JSendError.prototype;
-   Error.captureStackTrace(this, this.constructor);
-   this.name = this.constructor.name;
-   this.data = createJSendServerError(message, data, httpStatus);
-   this.message = this.data.message || "Server Error";
+class JSendServerError extends JSendError {
+   constructor(message, data, httpStatus) {
+      super();
+
+      if (Error.captureStackTrace) {
+         Error.captureStackTrace(this, JSendServerError);
+      }
+
+      this.name = this.constructor.name;
+      this.data = createJSendServerError(message, data, httpStatus);
+      this.message = this.data.message || "Server Error";
+   }
 }
 
 module.exports.decorateExpressResponse = decorateExpressResponse;
