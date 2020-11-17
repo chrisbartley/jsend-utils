@@ -13,7 +13,7 @@
   "author": "Chris Bartley <bartley@cmu.edu>",
   "license": "GPL-2.0",
   "dependencies": {
-    "http-status": "^1.4.2"
+    "http-status": "^1.5.0"
   },
   "devDependencies": {
     "jsdoc": "^3.6.6",
