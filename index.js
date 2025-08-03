@@ -1,4 +1,4 @@
-const httpStatusCodes = require('http-status');
+const {default: httpStatusCodes} = require('http-status');
 
 /**
  * Creates and returns JSend success object.
@@ -11,9 +11,9 @@ const httpStatusCodes = require('http-status');
 const createJSendSuccess = function(data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.OK;
    return {
-      code : httpStatus,
-      status : 'success',
-      data : data
+      code: httpStatus,
+      status: 'success',
+      data: data
    }
 };
 
@@ -31,10 +31,10 @@ const createJSendSuccess = function(data, httpStatus) {
 const createJSendClientError = function(message, data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.BAD_REQUEST;
    return {
-      code : httpStatus,
-      status : 'error',   // JSend calls actually calls for "fail", but that seems counterintuitive and wrong
-      data : data,
-      message : message
+      code: httpStatus,
+      status: 'error',   // JSend actually calls for "fail", but that seems counterintuitive and wrong
+      data: data,
+      message: message
    }
 };
 
@@ -65,10 +65,10 @@ const createJSendClientValidationError = function(message, data) {
 const createJSendServerError = function(message, data, httpStatus) {
    httpStatus = httpStatus || httpStatusCodes.INTERNAL_SERVER_ERROR;
    return {
-      code : httpStatus,
-      status : 'fail',  // JSend calls actually calls for "error", but that seems counterintuitive and wrong
-      data : data,
-      message : message
+      code: httpStatus,
+      status: 'fail',  // JSend actually calls for "error", but that seems counterintuitive and wrong
+      data: data,
+      message: message
    };
 };
 
