@@ -1,6 +1,6 @@
 {
   "name": "jsend-utils",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "description": "Simple helper functions for producing JSend objects and responses.",
   "main": "index.js",
   "scripts": {
